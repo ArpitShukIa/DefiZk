@@ -1,66 +1,116 @@
-## Foundry
+# Privacy-Preserving DeFi with Zero-Knowledge Compliance
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This project demonstrates a privacy-preserving DeFi application that uses zero-knowledge proofs while maintaining regulatory compliance capabilities. It's built using the Foundry development framework.
 
-Foundry consists of:
+## Overview
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+The system consists of two main components:
 
-## Documentation
+1. **PrivacyPreservingDeFi**: The main contract that handles deposits, withdrawals, and private transfers using ZK proofs
+2. **ComplianceVerifier**: Handles KYC verification and risk scoring for users
 
-https://book.getfoundry.sh/
+## Features
+
+- Privacy-preserving transfers using zero-knowledge proofs
+- Regulatory compliance capabilities with KYC verification
+- Risk scoring for users
+- Admin controls for compliance verification
+- Double-spending protection for ZK proofs
+- Comprehensive test suite
+
+## Requirements
+
+- [Foundry](https://getfoundry.sh/)
+- Solidity 0.8.19+
+
+## Installation
+
+```bash
+git clone <repo-url>
+cd privacy-preserving-defi
+forge install
+```
+
+## Building
+
+```bash
+forge build
+```
+
+## Testing
+
+```bash
+forge test
+```
+
+For verbose output:
+
+```bash
+forge test -vvv
+```
+
+## Deployment
+
+To deploy to a local network:
+
+1. Start a local node (e.g., Anvil)
+```bash
+anvil
+```
+
+2. Deploy using the script
+```bash
+forge script script/Deploy.s.sol --fork-url http://localhost:8545 --private-key <private-key>
+```
+
+To deploy to a testnet or mainnet:
+
+1. Set up environment variables
+```bash
+export PRIVATE_KEY=your_private_key
+export SEPOLIA_RPC_URL=your_sepolia_rpc_url
+export ETHERSCAN_API_KEY=your_etherscan_api_key
+```
+
+2. Deploy to the chosen network
+```bash
+forge script script/Deploy.s.sol --rpc-url $SEPOLIA_RPC_URL --broadcast --verify
+```
 
 ## Usage
 
-### Build
+### User Flow
 
-```shell
-$ forge build
-```
+1. **KYC Verification**:
+    - Users are verified through the ComplianceVerifier contract
+    - Verification includes KYC status and risk score assessment
 
-### Test
+2. **Depositing Funds**:
+    - Users deposit ETH into the PrivacyPreservingDeFi contract
 
-```shell
-$ forge test
-```
+3. **Private Transfers**:
+    - Users generate a zero-knowledge proof (off-chain)
+    - They submit the proof with their transfer transaction
+    - The contract verifies the proof and compliance status before executing the transfer
 
-### Format
+4. **Withdrawals**:
+    - Similar to transfers, but funds are sent to the user's wallet
+    - Requires both a valid ZK proof and compliance verification
 
-```shell
-$ forge fmt
-```
+### Admin Operations
 
-### Gas Snapshots
+- Set compliance verifiers
+- Adjust compliance thresholds
+- Verify KYC status of users
+- Set risk scores for users
 
-```shell
-$ forge snapshot
-```
+## Security Considerations
 
-### Anvil
+- The ZK verification in this example is simplified. In a production environment, you would use a proper ZK proving system like Groth16 or PLONK
+- The compliance verification should be integrated with proper KYC/AML providers
+- Additional access controls and time locks should be implemented for admin functions
+- Formal verification recommended before production use
 
-```shell
-$ anvil
-```
+## License
 
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+This project is licensed under MIT.
