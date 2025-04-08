@@ -1,6 +1,6 @@
 // App.tsx
 import React, { useState, useEffect } from 'react';
-import { createPublicClient, createWalletClient, custom, http, parseEther, formatEther } from 'viem';
+import {createPublicClient, createWalletClient, custom, http, parseEther, formatEther, Hex} from 'viem';
 import { PrivacyPreservingDeFiABI } from './abis/PrivacyPreservingDeFiABI';
 import { ComplianceVerifierABI } from './abis/ComplianceVerifierABI';
 import './App.css';
@@ -16,23 +16,23 @@ import AdminPanel from './components/AdminPanel';
 
 // Mock ZK proof generator (in a real app, this would be using a proper ZK library)
 import { generateMockZkProof } from './utils/zkProofGenerator';
-import {mainnet} from "viem/chains";
+import {baseSepolia} from "viem/chains";
 
 function App() {
   // State variables
-  const [account, setAccount] = useState<string | null>(null);
+  const [account, setAccount] = useState<Hex | null>(null);
   const [balance, setBalance] = useState<string>('0');
   const [complianceStatus, setComplianceStatus] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [transactions, setTransactions] = useState<any[]>([]);
-  const [defiContractAddress, setDefiContractAddress] = useState<string>('0xYourDeployedContractAddress');
-  const [complianceContractAddress, setComplianceContractAddress] = useState<string>('0xYourDeployedComplianceAddress');
+  const [defiContractAddress, setDefiContractAddress] = useState<string>('0x7E3DE9bB767E6a36f686262D5fB9226BD5146783');
+  const [complianceContractAddress, setComplianceContractAddress] = useState<string>('0xaEF0cC12F1ac324F774291cEC9e1903090eFD5b0');
   const [notification, setNotification] = useState<{message: string, type: string} | null>(null);
 
   // Create public client
   const publicClient = createPublicClient({
-    chain: mainnet,
+    chain: baseSepolia,
     transport: http(),
   });
 
@@ -58,8 +58,8 @@ function App() {
   // Create wallet client
   const walletClient = account
       ? createWalletClient({
-        chain: mainnet,
-        transport: custom(window.ethereum),
+        chain: baseSepolia,
+        transport: custom(window.ethereum as any),
         account,
       })
       : null;
